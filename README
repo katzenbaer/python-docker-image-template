@@ -1,0 +1,12 @@
+# Python Docker Image Template
+
+## Build
+This project uses Docker. Run `./build.sh` to build the docker image.
+
+## Configure
+Edit the `env.list` file to provide your environment variabels you want exposed to the Python app.
+
+## Run
+Run the docker image with `./run.sh`. This will also bind mount the `assets` directory to the docker container.
+
+
