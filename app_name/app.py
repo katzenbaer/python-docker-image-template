@@ -1,4 +1,6 @@
 import logging
+import os
+import time
 
 __copyright__ = "Copyright 2020, Terrence Katzenbaer"
 
@@ -14,4 +16,17 @@ class App:
 
     def hello_world(self):
         log.info("Hello World!")
+        log.info(f"Working directory is {os.getcwd()}")
+
+        time.sleep(1)
+
+        foo = input("What do you want to write? ")
+
+        if not foo:
+            log.error("User entered no input.")
+            return False
+
+        with open('assets/foo.txt', 'w') as f:
+            f.write(foo)
+
         return True

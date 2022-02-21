@@ -1,20 +1,35 @@
-FROM python:3 as base
+FROM python:3.10 as base
 
-FROM base as builder
+# Setup env
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+ENV PYTHONFAULTHANDLER 1
 
-RUN mkdir /install
-WORKDIR /install
+FROM base AS builder
 
-COPY requirements.txt /requirements.txt
+# Install pipenv and compilation dependencies
+RUN pip install pipenv
+RUN apt-get update && apt-get install -y --no-install-recommends gcc
 
-RUN pip install --no-warn-script-location --prefix=/install -r /requirements.txt
+# Install python dependencies in /.venv
+COPY Pipfile .
+COPY Pipfile.lock .
+RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 
-FROM base
+FROM base AS runtime
 
-COPY --from=builder /install /usr/local
+# Copy virtual env from python-deps stage
+COPY --from=builder /.venv /.venv
+ENV PATH="/.venv/bin:$PATH"
 
-COPY . /app
-WORKDIR /app
+# Create and switch to a new user
+RUN useradd --create-home appuser
+WORKDIR /home/appuser
+USER appuser
 
+# Install application into container
+COPY . ./app
+WORKDIR ./app
+
+# Run the application
 CMD ["python", "./main.py"]
-
