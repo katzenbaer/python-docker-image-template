@@ -18,6 +18,10 @@ class App:
         log.info("Hello World!")
         log.info(f"Working directory is {os.getcwd()}")
 
+        log.info(f"Env var test: {os.getenv('SOME_ENV_KEY')}")
+
+        assert(os.getenv('SOME_ENV_KEY') == 'some_env_value')
+
         time.sleep(1)
 
         foo = input("What do you want to write? ")
