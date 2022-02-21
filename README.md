@@ -13,3 +13,7 @@ Edit the `env.list` file to provide your environment variables you want exposed 
 
 ## Run from Shell
 Run the docker image with `./run.sh`. This will also bind mount the `assets` directory to the docker container.
+
+## Installing new packages
+1. Add the new package to `Pipfile`
+2. Run `pipenv lock` in a shell session with a Python interpreter with the `pipenv` package installed. 
